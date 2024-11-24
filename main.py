@@ -6,8 +6,8 @@ import pymunk.pygame_util
 
 pygame.init()
 
-WIDTH, HEUGHT = 1000, 800
-window = pygame.display.set_mode((WIDTH, HEUGHT))
+WIDTH, HEIGHT = 1000, 800
+window = pygame.display.set_mode((WIDTH, HEIGHT))
 
 
 
@@ -22,13 +22,20 @@ def create_ball(space, radius, mass):
     body.position = (100, 300)
     shape = pymunk.Circle(body, radius)
     shape.mass = mass
-    shape.color = (0, 0, 255)
+    shape.color = (0, 0, 255, 255)
+    space.add(body, shape)
+    return shape
+
+def create_line(space, start, end):
+    body = pymunk.Body(body_type=pymunk.Body.STATIC)
+    shape = pymunk.Segment(body, start, end, 5)
+    shape.color = (0, 0, 0, 255)
     space.add(body, shape)
     return shape
     
     
 
-def run(window, WIDTH, HEUGHT):
+def run(window):
     running = True
     clock = pygame.time.Clock()
     fps = 60
@@ -39,12 +46,14 @@ def run(window, WIDTH, HEUGHT):
     
     ball = create_ball(space, 20, 5)
     
+    line = create_line(space, (0, 400), (WIDTH - 200, 600))
+    
     draw_options = pymunk.pygame_util.DrawOptions(window)
     
     while running:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = True
+                running = False
                 break
                 
         draw(space, window, draw_options)
@@ -54,5 +63,5 @@ def run(window, WIDTH, HEUGHT):
     pygame.quit()
     
 if __name__ == "__main__":
-    run(window, WIDTH, HEUGHT)
+    run(window)
         
