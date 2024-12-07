@@ -1,8 +1,9 @@
 import pymunk
 
 class Ball:
-    pass
-    # def __init__(self, space, position):
-    #     self.body = pymunk.Body(1, 900)
-    #     self.body.position = position
-    #     self.shape = pymunk.Circle(self)
+    def __init__(self, x, y, radius):
+        self.body = pymunk.Body(mass, pymunk.moment_for_circle(mass, 0, radius))
+        self.body.position = x, y
+        self.shape = pymunk.Circle(self.body, radius)
+        self.shape.elasticity = elasticity
+        self.shape.friction = friction

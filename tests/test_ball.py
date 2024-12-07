@@ -8,11 +8,11 @@ def space():
     return pymunk.Space()
 
 def test_ball_init(space):
-    position = (100, 300)
-    ball = Ball(space, position)
-    
-    assert ball.body.position == position
-    assert ball.shape.radius == 15
+    ball = Ball(300, 400, radius=10, mass=1)
+    assert ball.body.position == (300, 400)
+    assert ball.radius == 10
+
+def test_ball_collision(space):
+    ball = Ball(300, 400, radius=10, mass=1)
     assert ball.shape.elasticity == 0.8
-    
-        
+    assert ball.shape.friction == 0.5
