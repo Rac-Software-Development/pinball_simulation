@@ -17,6 +17,8 @@ class Wall:
 
     def add_to_space(self, space):
         space.add(self.body)
+        for shape in self.shapes:
+            space.add(shape)
 
     def draw(self, screen):
         for i in range(len(self.points) - 1):

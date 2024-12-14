@@ -20,8 +20,6 @@ def main():
     ball = Ball(300, 100, radius=10, mass=1)
     space.add(ball.body, ball.shape)
 
-    
-
     wall_points = [
         (50, 850), (50, 700), (30, 500), (50, 300), (100, 200),
         (200, 100), (300, 50), (400, 100), (500, 200),
