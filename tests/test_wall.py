@@ -17,3 +17,7 @@ def test_wall_init(wall):
     
 def test_wall_elasticity(wall):
     assert wall.shape.elasticity == 0.7
+    
+     
+    
+    

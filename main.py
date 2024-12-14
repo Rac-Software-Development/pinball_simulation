@@ -20,32 +20,33 @@ def main():
     ball = Ball(300, 100, radius=10, mass=1)
     space.add(ball.body, ball.shape)
 
-    wall_top = Wall((50, 50), (550, 50), thickness=5, color=pygame.Color("black"))
-    wall_left = Wall((50, 50), (50, 850), thickness=5, color=pygame.Color("black"))
-    wall_right = Wall((50, 50), (550, 850), thickness=5, color=pygame.Color("black"))
+    
 
-    space.add(wall_top.body, wall_top.shape)
-    space.add(wall_left.body, wall_left.shape)
-    space.add(wall_right.body, wall_right.shape)
+    wall_points = [
+        (50, 850), (50, 700), (30, 500), (50, 300), (100, 200),
+        (200, 100), (300, 50), (400, 100), (500, 200),
+        (550, 300), (570, 500), (550, 700), (550, 850)
+    ]
+    outer_wall = Wall(wall_points, thickness=5, color=pygame.Color("black"))
+    outer_wall.add_to_space(space)
 
     clock = pygame.time.Clock()
-
     run = True
+
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        clock.tick(FPS)
-
         screen.fill(pygame.Color("white"))
         ball.draw(screen)
-        wall_top.draw(screen)
-        wall_left.draw(screen)
-        wall_right.draw(screen)
+        outer_wall.draw(screen)
+        
+
         space.step(1 / FPS)
 
         pygame.display.flip()
+        clock.tick(FPS)
 
     pygame.quit()
 
