@@ -15,9 +15,10 @@ def main():
     pygame.display.set_caption("Dylan's Pinball simulation")
 
     space = pymunk.Space()
-    space.gravity = (0, 900)
+    space.gravity = (0, 800)
 
     ball = Ball(300, 100, radius=10, mass=1)
+    ball.body.velocity = pymunk.Vec2d(0, 100)
     space.add(ball.body, ball.shape)
 
     wall_points = [
@@ -27,6 +28,17 @@ def main():
     ]
     outer_wall = Wall(wall_points, thickness=5, color=pygame.Color("black"))
     outer_wall.add_to_space(space)
+    
+    ramp_points = [
+        (200, 700), 
+        (400, 500)
+    ]
+    ramp = Wall(ramp_points, thickness=5, color=pygame.Color("blue"))
+    
+    for shape in ramp.shapes:
+        shape.elasticity = 0.8
+        shape.friction = 0.4
+    ramp.add_to_space(space)
 
     clock = pygame.time.Clock()
     run = True
@@ -39,6 +51,7 @@ def main():
         screen.fill(pygame.Color("white"))
         ball.draw(screen)
         outer_wall.draw(screen)
+        ramp.draw(screen)
         
 
         space.step(1 / FPS)
