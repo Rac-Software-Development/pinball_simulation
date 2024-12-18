@@ -2,7 +2,7 @@ import pygame
 import pymunk
 from components.ball import Ball
 from components.wall import Wall
-
+from components.flipper import Flipper
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
@@ -28,17 +28,20 @@ def main():
     ]
     outer_wall = Wall(wall_points, thickness=5, color=pygame.Color("black"))
     outer_wall.add_to_space(space)
-    
+
     ramp_points = [
         (200, 700), 
         (400, 500)
     ]
     ramp = Wall(ramp_points, thickness=5, color=pygame.Color("blue"))
-    
+
     for shape in ramp.shapes:
         shape.elasticity = 0.8
         shape.friction = 0.4
     ramp.add_to_space(space)
+
+    left_flipper = Flipper(space, position=(125, 800), length=120, is_left=True)
+    right_flipper = Flipper(space, position=(475, 800), length=120, is_left=False)
 
     clock = pygame.time.Clock()
     run = True
@@ -48,11 +51,24 @@ def main():
             if event.type == pygame.QUIT:
                 run = False
 
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            left_flipper.flip(True)
+        else:
+            left_flipper.flip(False)
+
+        if keys[pygame.K_RIGHT]:
+            right_flipper.flip(True)
+        else:
+            right_flipper.flip(False)
+
         screen.fill(pygame.Color("white"))
+
         ball.draw(screen)
         outer_wall.draw(screen)
         ramp.draw(screen)
-        
+        left_flipper.draw(screen)
+        right_flipper.draw(screen)
 
         space.step(1 / FPS)
 
