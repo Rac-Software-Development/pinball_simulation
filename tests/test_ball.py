@@ -11,19 +11,15 @@ def space():
 
 # tests the initialization of the ball object
 def test_ball_init(space):
-    ball = Ball(300, 400, radius=10, mass=1)
-    assert ball.body.position == (300, 400)
-    assert ball.radius == 10
+    ball = Ball(space, (300, 400))
+    assert ball.body.position.x == 300
+    assert ball.body.position.y == 400
+    assert isinstance(ball.body, pymunk.Body)
+    assert isinstance(ball.shape, pymunk.Circle)
 
 # tests physical capabilities of the ball
-def test_ball_collision(space):
-    ball = Ball(300, 400, radius=10, mass=1)
-    assert ball.shape.elasticity == 0.8
-    assert ball.shape.friction == 0.5
-    
-# tests the ball adding to the space
-def test_ball_added_to_space(space):
-    ball = Ball(300, 400, radius=10, mass=1)
-    space.add(ball.body, ball.shape)
-    assert ball.body in space.bodies
-    assert ball.shape in  space.shapes
+def test_ball_spawn(space):
+    ball = Ball.spawn(space)
+    assert isinstance(ball, Ball)
+    assert 115 <= ball.body.position.x <= 350
+    assert ball.body.position.y == 200
