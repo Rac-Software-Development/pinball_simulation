@@ -1,19 +1,19 @@
 import pymunk
-import pygame
+import random
 
 class Ball:
-    def __init__(self, x, y, radius, mass):
-        self.radius = radius
-        self.body = pymunk.Body(mass, pymunk.moment_for_circle(mass, 0, radius))
-        self.body.position = x, y
+    def __init__(self, space, position, radius=20, mass=1, elasticity=0.95):
+        inertia = pymunk.moment_for_circle(mass, 0, radius, (0, 0))
+        self.body = pymunk.Body(mass, inertia)
+        self.body.position = position
         self.shape = pymunk.Circle(self.body, radius)
-        self.shape.elasticity = 0.8
-        self.shape.friction = 0.5
+        self.shape.elasticity = elasticity
+        space.add(self.body, self.shape)
         
-    def draw(self, screen):
-        pygame.draw.circle(
-            screen,
-            (128, 128, 128),
-            (int(self.body.position.x), int(self.body.position.y)),
-            self.radius
-        )
+        
+    @staticmethod
+    def spawn(space):
+        x = random.randint(115, 350)
+        return Ball(space, (x, 200))
+        
+    
