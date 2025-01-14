@@ -2,7 +2,7 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 from components.ball import Ball
-from components.wall import OuterLine
+from components.outer_lines import OuterLine
 from components.flipper import Flipper
 
 SCREEN_WIDTH = 600
