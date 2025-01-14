@@ -2,50 +2,68 @@ import pygame
 import pymunk
 import pymunk.pygame_util
 from components.ball import Ball
-from components.wall import Wall
+from components.wall import OuterLine
 from components.flipper import Flipper
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
 FPS = 60
 
+def create_outer_lines(space):
+   return [
+       OuterLine(space, [
+           (50, 850),
+           (50, 50),
+           (300, 10),
+       ], color=(255, 0, 0)),
+       
+       OuterLine(space, [
+           (550, 850),
+           (550, 50),
+           (300, 10)
+       ], color=(255, 0, 0)),
+       
+       OuterLine(space, [
+           (200, 850),
+           (50, 850),
+       ], color=(255, 0, 0)),
+       
+       OuterLine(space, [
+           (550, 850),
+           (450, 850),
+       ], color=(255, 0, 0)),
+   ]
+   
+    
 
 def main():
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("Dylan's Pinball simulation")
     clock = pygame.time.Clock()
-    run = True
 
     space = pymunk.Space()
     space.gravity = (0, 900)
     draw_options = pymunk.pygame_util.DrawOptions(screen)
 
-    ball = Ball(300, 100, radius=10, mass=1)
+    ball = Ball(space, (100, 100), radius=10, mass=1)
     ball.body.velocity = pymunk.Vec2d(0, 100)
-    space.add(ball.body, ball.shape)
+    outer_lines = create_outer_lines(space)
 
-    wall_points = [
-        Wall(space, (150, 500), (50, 50)),
-        Wall(space, (450, 800), (550, 50)),
-        Wall(space, (50, 50), (300, 0)),
-        Wall(space, (300, 0), (550, 50)),
-        Wall(space, (300, 180), (400, 200))
-    ]
-
-
+    run = True
 
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
-        
-
         screen.fill(pygame.Color("white"))
+        for line in outer_lines:
+            line.draw(screen)
+        
+        
         space.debug_draw(draw_options)
 
-        ball.draw(screen)
         space.step(1 / FPS)
 
         pygame.display.flip()
