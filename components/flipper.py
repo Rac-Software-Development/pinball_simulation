@@ -1,6 +1,6 @@
 import pymunk
 import pygame
-import math
+
 
 class Flipper: 
     def __init__(self, space, position, length=100, angle=0, color=(0,0,255)):
@@ -33,3 +33,8 @@ class Flipper:
     def draw(self, screen):
         vertices = [self.body.position + v.rotated(self.body.angle) for v in self.shape.get_vertices()]
         pygame.draw.polygon(screen, self.color, vertices)
+
+        pygame.draw.line(screen, (0,0,0), self.line_start, self.line_end, 2)
+
+    def update_line(self):
+        self.line_end =  self.position

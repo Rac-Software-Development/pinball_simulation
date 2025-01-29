@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.insert(0, "C:/pinball_simulation/pinball_simulation/")
+sys.path.insert(0, "C:/Users/dylsa/pinball_simulation/")
 from components.flipper import Flipper
 import pymunk
 
