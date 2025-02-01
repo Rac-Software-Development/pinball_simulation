@@ -10,6 +10,7 @@ def space():
     space.gravity = (0, 0)
     return space
 
+# tests if the flipper is created at the correct position
 def test_flipper_making(space):
     flipper = Flipper(space, (150, 700), is_left=True)
     
@@ -17,6 +18,7 @@ def test_flipper_making(space):
     assert flipper.body.angle == 0.0
     assert flipper.is_left is True
 
+# tests if the flipper rotates in the correct direction
 def test_flipper_rotation(space):
     flipper = Flipper(space, (150, 700), is_left=True)
 
@@ -36,6 +38,7 @@ def test_flipper_rotation(space):
     else:
         assert new_angle > initial_angle, f"Right flipper should rotate clockwise. expected > {initial_angle}, got {new_angle}"
 
+# tests if the flipper rotates back to its original position after deactivation
 def test_flipper_line_update(space):
     flipper = Flipper(space, (150, 700), is_left=True)
     expected_pivot = pymunk.Vec2d(150, 700) + pymunk.Vec2d(-50, 0)
