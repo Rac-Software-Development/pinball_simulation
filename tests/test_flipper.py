@@ -11,32 +11,38 @@ def space():
     return space
 
 def test_flipper_making(space):
-    flipper = Flipper(space, (150, 700), length=100, angle=0)
+    flipper = Flipper(space, (150, 700), is_left=True)
     
-    assert flipper.body.position == pymunk.Vec2d(150, 700)
-    
-    assert flipper.length == 100
-    
-    assert flipper.body.angle == 0
-    
+    assert flipper.body.position == pytest.approx(pymunk.Vec2d(150, 700), rel=1e-3)
+    assert flipper.body.angle == 0.0
+    assert flipper.is_left is True
+
 def test_flipper_rotation(space):
-    flipper = Flipper(space, (150, 700), length=100, angle=0)
-    
+    flipper = Flipper(space, (150, 700), is_left=True)
+
     initial_angle = flipper.body.angle
-    flipper.rotate(3.14 / 4)
-    
-    assert flipper.body.angle == pytest.approx(initial_angle + 3.14 / 4, rel=1e-2)
-    
+    print(f"initial angle: {initial_angle}")
+
+    flipper.activate()
+
+    for _ in range(10):
+        space.step(1/60)
+
+    new_angle = flipper.body.angle
+    print(f"new_angle after activation: {new_angle}")
+
+    if flipper.is_left:
+        assert new_angle < initial_angle, f"Left flipper should rotate counterclockwise. expected < {initial_angle}, got {new_angle}"
+    else:
+        assert new_angle > initial_angle, f"Right flipper should rotate clockwise. expected > {initial_angle}, got {new_angle}"
+
 def test_flipper_line_update(space):
-    flipper = Flipper(space, (150, 700), length=100, angle=0)
-    
-    initial_line_end = flipper.line_end
-    flipper.rotate(3.14 / 4)
-    
-    assert flipper.line_end != initial_line_end
-    assert flipper.line_end == pytest.approx(
-        flipper.position + pymunk.Vec2d(100, 0).rotated(flipper.body.angle),
-        rel=1e-2
-    )
-    
-    
+    flipper = Flipper(space, (150, 700), is_left=True)
+    expected_pivot = pymunk.Vec2d(150, 700) + pymunk.Vec2d(-50, 0)
+    flipper.activate()
+
+    for _ in range(10):
+        space.step(1/60)
+
+    actual_pivot = flipper.pivot.anchor_a
+    assert actual_pivot == pytest.approx(expected_pivot, rel=1e-2), f"pivot point moved! expected {expected_pivot}, got {actual_pivot}"

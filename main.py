@@ -52,8 +52,8 @@ def main():
 
     outer_lines = create_outer_lines(space)
 
-    left_flipper = Flipper(space, (150, 800), is_left=True)
-    right_flipper = Flipper(space, (450, 800), is_left=False)
+    left_flipper = Flipper(space, (150, 700), is_left=True)
+    right_flipper = Flipper(space, (450, 700), is_left=False)
 
     run = True
     while run:
@@ -64,9 +64,14 @@ def main():
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT]:
             left_flipper.activate()
+        else:
+            left_flipper.deactivate()
         
+
         if keys[pygame.K_RIGHT]:
             right_flipper.activate()
+        else:
+            right_flipper.deactivate()
 
         screen.fill(pygame.Color("white"))
 
@@ -74,8 +79,7 @@ def main():
         for line in outer_lines:
             line.draw(screen)
 
-        left_flipper.update_line()
-        right_flipper.update_line()
+        
         left_flipper.draw(screen)
         right_flipper.draw(screen)
         
