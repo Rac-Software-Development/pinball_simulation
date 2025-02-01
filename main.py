@@ -48,18 +48,37 @@ def main():
 
     ball = Ball(space, (100, 100), radius=10, mass=1)
     ball.body.velocity = pymunk.Vec2d(0, 100)
+
+
     outer_lines = create_outer_lines(space)
 
-    run = True
+    left_flipper = Flipper(space, (150, 800), is_left=True)
+    right_flipper = Flipper(space, (450, 800), is_left=False)
 
+    run = True
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT]:
+            left_flipper.activate()
+        
+        if keys[pygame.K_RIGHT]:
+            right_flipper.activate()
+
         screen.fill(pygame.Color("white"))
+
+
         for line in outer_lines:
             line.draw(screen)
+
+        left_flipper.update_line()
+        right_flipper.update_line()
+        left_flipper.draw(screen)
+        right_flipper.draw(screen)
+        
         
         
         space.debug_draw(draw_options)
