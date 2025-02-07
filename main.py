@@ -4,6 +4,7 @@ import pymunk.pygame_util
 from components.ball import Ball
 from components.outer_lines import OuterLine
 from components.flipper import Flipper
+from components.bumper import Bumper
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
@@ -55,6 +56,11 @@ def main():
     left_flipper = Flipper(space, (150, 700), is_left=True)
     right_flipper = Flipper(space, (450, 700), is_left=False)
 
+    bumpers = [
+        Bumper(space, (200, 600)),
+        Bumper(space, (400, 600))
+    ]
+
     run = True
     while run:
         for event in pygame.event.get():
@@ -78,6 +84,9 @@ def main():
 
         for line in outer_lines:
             line.draw(screen)
+
+        for bumper in bumpers:
+            bumper.draw(screen)
 
         
         left_flipper.draw(screen)

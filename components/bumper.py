@@ -1,5 +1,18 @@
 import pymunk
 import pygame
 
+# bumper class
 class Bumper:
-    pass
+    def __init__(self, space, position, radius=30):
+        self.space = space
+        self.radius = radius
+
+        self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
+        self.body.position = position
+        self.shape = pymunk.Circle(self.body, radius)
+        self.shape.elasticity = 2.0
+        self.space.add(self.body, self.shape)
+
+    # draw the bumper
+    def draw(self, screen):
+        pygame.draw.circle(screen, (0,0,0), (int(self.body.position.x), int(self.body.position.y)), self.radius)
