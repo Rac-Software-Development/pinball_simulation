@@ -5,6 +5,7 @@ from components.ball import Ball
 from components.outer_lines import OuterLine
 from components.flipper import Flipper
 from components.bumper import Bumper
+from components.ball_guide import BallGuide
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
@@ -47,14 +48,19 @@ def main():
     space.gravity = (0, 900)
     draw_options = pymunk.pygame_util.DrawOptions(screen)
 
-    ball = Ball(space, (100, 100), radius=10, mass=1)
+    ball = Ball(space, (150, 100), radius=10, mass=1)
     ball.body.velocity = pymunk.Vec2d(0, 100)
 
 
     outer_lines = create_outer_lines(space)
 
-    left_flipper = Flipper(space, (150, 700), is_left=True)
-    right_flipper = Flipper(space, (450, 700), is_left=False)
+    ball_guides = [
+        BallGuide(space, (175, 750), (100, 675)), # left guide
+        BallGuide(space, (425, 750), (500, 675)) # right guide
+    ]
+
+    left_flipper = Flipper(space, (230, 750), is_left=True)
+    right_flipper = Flipper(space, (370, 750), is_left=False)
 
     bumpers = [
         Bumper(space, (200, 600)),
@@ -84,6 +90,9 @@ def main():
 
         for line in outer_lines:
             line.draw(screen)
+
+        for guide in ball_guides:
+            guide.draw(screen)
 
         for bumper in bumpers:
             bumper.draw(screen)
