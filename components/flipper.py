@@ -8,7 +8,7 @@ class Flipper:
         self.is_left = is_left
 
         width, height = 100, 20
-        mass = 1
+        mass = 2
         moment = pymunk.moment_for_box(mass, (width, height))
 
         self.body = pymunk.Body(mass, moment)

@@ -13,27 +13,31 @@ FPS = 60
 
 def create_outer_lines(space):
    return [
+       # left line
        OuterLine(space, [
-           (50, 850),
-           (50, 50),
-           (300, 10),
-       ], color=(255, 0, 0)),
+           (50, 850), # bottom left
+           (50, 50), # top left
+           (300, 10), # diagonal line to top center
+       ], color=(255, 255, 255)),
        
+       # right line
        OuterLine(space, [
-           (550, 850),
-           (550, 50),
-           (300, 10)
-       ], color=(255, 0, 0)),
+           (550, 850), # bottom right
+           (550, 50), # top right
+           (300, 10) # diagonal line to top center
+       ], color=(255, 255, 255)),
        
+       # bottom line
        OuterLine(space, [
            (200, 850),
            (50, 850),
-       ], color=(255, 0, 0)),
-       
+       ], color=(255, 255, 255)),
+
+        # bottom line
        OuterLine(space, [
            (550, 850),
            (450, 850),
-       ], color=(255, 0, 0)),
+       ], color=(255, 255, 255)),
    ]
    
     
@@ -45,11 +49,11 @@ def main():
     clock = pygame.time.Clock()
 
     space = pymunk.Space()
-    space.gravity = (0, 900)
-    draw_options = pymunk.pygame_util.DrawOptions(screen)
+    space.gravity = (0, 600)
+    
 
-    ball = Ball(space, (150, 100), radius=10, mass=1)
-    ball.body.velocity = pymunk.Vec2d(0, 100)
+    ball = Ball(space, (150, 100), radius=10, mass=2, elasticity=0.85)
+    ball.body.velocity = pymunk.Vec2d(0, 50)
 
 
     outer_lines = create_outer_lines(space)
@@ -63,8 +67,8 @@ def main():
     right_flipper = Flipper(space, (370, 750), is_left=False)
 
     bumpers = [
-        Bumper(space, (200, 600)),
-        Bumper(space, (400, 600))
+        Bumper(space, (200, 600), color=(255, 255, 255)),
+        Bumper(space, (400, 600), color=(255, 255, 255)),
     ]
 
     run = True
@@ -85,8 +89,9 @@ def main():
         else:
             right_flipper.deactivate()
 
-        screen.fill(pygame.Color("white"))
+        screen.fill(pygame.Color("black"))
 
+        ball.draw(screen)
 
         for line in outer_lines:
             line.draw(screen)
@@ -103,7 +108,7 @@ def main():
         
         
         
-        space.debug_draw(draw_options)
+        
 
         space.step(1 / FPS)
 

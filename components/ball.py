@@ -1,4 +1,5 @@
 import pymunk
+import pygame
 import random
 
 class Ball:
@@ -8,7 +9,17 @@ class Ball:
         self.body.position = position
         self.shape = pymunk.Circle(self.body, radius)
         self.shape.elasticity = elasticity
+        self.shape.friction = 1.2
+        self.color = (128, 128, 128)
         space.add(self.body, self.shape)
+
+    def draw(self, screen):
+        pygame.draw.circle(
+            screen,
+            self.color,
+            (int(self.body.position.x), int(self.body.position.y)),
+            int(self.shape.radius)
+        )
         
         
     @staticmethod

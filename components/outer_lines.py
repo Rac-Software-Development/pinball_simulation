@@ -3,7 +3,7 @@ import pygame
 import pygame
 
 class OuterLine: 
-    def __init__(self, space, vertices, thickness=5.0, elasticity=0.8, color=(0,0,0)):
+    def __init__(self, space, vertices, thickness=5.0, elasticity=0.8, color=(255, 255, 255)):
        self.color = color
        self.lines = []
        

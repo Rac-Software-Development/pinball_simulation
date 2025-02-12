@@ -2,7 +2,7 @@ import pymunk
 import pygame
 
 class BallGuide:
-    def __init__(self, space, start_pos, end_pos, width=5, color=(0,0,0)):
+    def __init__(self, space, start_pos, end_pos, width=5, color=(255, 255, 255)):
         self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
         self.shape = pymunk.Segment(self.body, start_pos, end_pos, width)
         self.shape.elasticity = 1.0
