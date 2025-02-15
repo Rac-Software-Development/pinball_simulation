@@ -6,6 +6,7 @@ from components.outer_lines import OuterLine
 from components.flipper import Flipper
 from components.bumper import Bumper
 from components.ball_guide import BallGuide
+from components.slingshot import Slingshot
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
@@ -65,6 +66,13 @@ def main():
         BallGuide(space, (425, 750), (500, 675)) # right guide
     ]
 
+    # create the slingshots
+    slingshots = [
+        Slingshot(space, (180, 720), (250, 750)),
+        Slingshot(space, (420, 720), (350, 730))
+    ]
+
+
     # create the flippers
     left_flipper = Flipper(space, (230, 750), is_left=True)
     right_flipper = Flipper(space, (370, 750), is_left=False)
@@ -106,6 +114,9 @@ def main():
 
         for bumper in bumpers:
             bumper.draw(screen)
+        
+        for sling in slingshots:
+            sling.draw(screen)
 
         
         left_flipper.draw(screen)
