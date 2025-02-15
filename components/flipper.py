@@ -43,7 +43,7 @@ class Flipper:
         self.target_angle = max_angle if is_left else min_angle
 
         self.motor = pymunk.SimpleMotor(self.space.static_body, self.body, 0)
-        self.motor.max_force = 1500000
+        self.motor.max_force = 2000000
         self.motor_active = False
     
     # this function activates the flipper when the key is pressed

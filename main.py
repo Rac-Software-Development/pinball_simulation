@@ -71,8 +71,9 @@ def main():
 
     # create the bumpers
     bumpers = [
-        Bumper(space, (200, 600), color=(255, 255, 255)),
-        Bumper(space, (400, 600), color=(255, 255, 255)),
+        Bumper(space, (200, 300), color=(255, 255, 255)),
+        Bumper(space, (400, 400), color=(255, 255, 255)),
+        Bumper(space, (300, 200), color=(255, 255, 255))
     ]
 
     run = True
