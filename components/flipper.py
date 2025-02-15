@@ -2,11 +2,13 @@ import math
 import pygame
 import pymunk
 
+# flipper class
 class Flipper:
     def __init__(self, space, position, is_left):
         self.space = space
         self.is_left = is_left
 
+        
         width, height = 100, 20
         mass = 2
         moment = pymunk.moment_for_box(mass, (width, height))
@@ -15,7 +17,7 @@ class Flipper:
         self.body.position = position
         self.body.angle = 0.0
 
-
+        
         self.shape = pymunk.Poly.create_box(self.body, (100, 20))
         self.shape.elasticity = 0.5
         self.space.add(self.body, self.shape)
@@ -41,9 +43,10 @@ class Flipper:
         self.target_angle = max_angle if is_left else min_angle
 
         self.motor = pymunk.SimpleMotor(self.space.static_body, self.body, 0)
-        self.motor.max_force = 1000000
+        self.motor.max_force = 1500000
         self.motor_active = False
     
+    # this function activates the flipper when the key is pressed
     def activate(self):
         if not self.motor_active:
             self.motor_active = True
@@ -53,14 +56,14 @@ class Flipper:
             self.motor.rate = 10 if diff > 0 else -10
             self.space.add(self.motor)
 
+    # this function deactivates the flipper when the key is released
     def deactivate(self):
         if self.motor_active:
             self.motor_active = False
             self.space.remove(self.motor)
 
-    
+    # draw the flipper
     def draw(self, screen):
-
         vertices = [self.body.local_to_world(v) for v in self.shape.get_vertices()]
         points = [(int(v.x), int(v.y)) for v in vertices]
         pygame.draw.polygon(screen, (0, 255, 0), points)
