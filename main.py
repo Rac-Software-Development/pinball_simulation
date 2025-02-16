@@ -62,8 +62,8 @@ def main():
 
     # create the line that guides the ball to the flippers
     ball_guides = [
-        BallGuide(space, (175, 750), (100, 675)), # left guide
-        BallGuide(space, (425, 750), (500, 675)) # right guide
+        BallGuide(space, (175, 750), (50, 675)), # left guide
+        BallGuide(space, (425, 750), (550, 675)) # right guide
     ]
 
     # create the slingshots
