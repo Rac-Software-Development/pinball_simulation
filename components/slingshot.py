@@ -2,15 +2,31 @@ import pymunk
 import pygame
 
 class Slingshot:
-    def __init__(self, space, start_pos, end_pos, elasticity=1.5, color=(255,255,255)):
-        self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
-        self.shape = pymunk.Segment(self.body, start_pos, end_pos, 5)
-        self.shape.elasticity = elasticity
-        self.shape.friction = 0.5
-        self.shape.color =pygame.Color(*color)
-        space.add(self.body, self.shape)
+   def __init__(self, space, pivot, is_left, elasticity=1.8, color=(255, 255, 255)):
+         self.space = space
+         self.is_left = is_left
+         self.color = pygame.Color(*color)
+         
+         # triangle shape
+         offset = -50 if is_left else 50
+         base = 80
+         height = 40
 
-    
-    def draw(self, screen):
-        pygame.draw.line(screen, self.shape.color, self.shape.a, self.shape.b, 5)
+         self.points = [
+              (pivot[0] - base // 2, pivot[1]),
+              (pivot[0] + base // 2, pivot[1]),
+              (pivot[0] + offset, pivot[1] - height)
+         ]
+
+         self.body = pymunk.Body(body_type=pymunk.Body.STATIC)
+         self.shape = pymunk.Poly(self.body, self.points)
+         self.shape.elasticity = elasticity
+         self.shape.friction = 0.5
+         self.shape.collision_type = 2
+
+         space.add(self.body, self.shape)
+
+   def draw(self, screen):
+        pygame.draw.polygon(screen, self.color, self.points)
+
 

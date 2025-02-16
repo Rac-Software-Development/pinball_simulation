@@ -68,8 +68,8 @@ def main():
 
     # create the slingshots
     slingshots = [
-        Slingshot(space, (180, 720), (250, 750)),
-        Slingshot(space, (420, 720), (350, 730))
+        Slingshot(space, (200, 620), is_left=True),
+        Slingshot(space, (400, 620), is_left=False)
     ]
 
 
