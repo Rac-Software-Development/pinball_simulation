@@ -105,6 +105,7 @@ def main():
         screen.fill(pygame.Color("black"))
 
         ball.draw(screen)
+        ball.body.velocity = ball.body.velocity * ball.damping
 
         for line in outer_lines:
             line.draw(screen)
