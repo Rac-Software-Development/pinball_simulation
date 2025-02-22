@@ -7,6 +7,7 @@ from components.flipper import Flipper
 from components.bumper import Bumper
 from components.ball_guide import BallGuide
 from components.slingshot import Slingshot
+from components.target import Target
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
@@ -84,6 +85,11 @@ def main():
         Bumper(space, (300, 200), color=(255, 255, 255))
     ]
 
+    targets = [
+        Target(space, (300, 500), 20),
+        Target(space, (250, 400), 25)
+    ]
+
     run = True
     while run:
         for event in pygame.event.get():
@@ -118,6 +124,9 @@ def main():
         
         for sling in slingshots:
             sling.draw(screen)
+
+        for target in targets:
+            target.draw(screen)
 
         
         left_flipper.draw(screen)
