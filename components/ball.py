@@ -26,7 +26,7 @@ class Ball:
         
     @staticmethod
     def spawn(space):
-        x = random.randint(110, 350)
-        return Ball(space, (x, 200))
+        x = random.randint(50, 150)
+        return Ball(space, (x, 100))
         
     

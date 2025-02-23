@@ -83,14 +83,18 @@ def main():
     bumpers = [
         Bumper(space, (200, 300), color=(255, 255, 255)),
         Bumper(space, (400, 400), color=(255, 255, 255)),
-        Bumper(space, (300, 200), color=(255, 255, 255))
+        Bumper(space, (300, 200), color=(255, 255, 255)),
+        Bumper(space, (350, 500), color=(255, 255, 255))
     ]
 
     
-
+   # create the targets
     targets = [
         Target(space, (300, 500), 20),
-        Target(space, (250, 400), 25)
+        Target(space, (250, 400), 25),
+        Target(space, (150, 250), 20),
+        Target(space, (450, 200), 25),
+        Target(space, (300, 100), 20)
     ]
 
     scoreboard = ScoreBoard(font_size=36, position=(10, 5))
