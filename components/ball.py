@@ -1,6 +1,6 @@
 import pymunk
 import pygame
-import random
+
 
 class Ball:
     def __init__(self, space, position, radius=20, mass=1, elasticity=0.85, damping=1.00):
@@ -25,8 +25,9 @@ class Ball:
         
         
     @staticmethod
-    def spawn(space):
-        x = random.randint(50, 150)
-        return Ball(space, (x, 100))
+    def spawn(space, radius=10):
+        ball_init_x = 500
+        ball_init_y = 700
+        return Ball(space, (ball_init_x, ball_init_y), radius=radius)
         
     

@@ -56,7 +56,7 @@ def main():
     space.gravity = (0, 600)
     
     # create the ball
-    ball = Ball(space, (150, 100), radius=10, mass=2, elasticity=0.85)
+    ball = Ball.spawn(space, radius=10)
     ball.body.velocity = pymunk.Vec2d(0, 50)
 
     # create the outer lines
