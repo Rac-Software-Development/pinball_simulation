@@ -86,12 +86,22 @@ def main():
         Bumper(space, (300, 200), color=(255, 255, 255))
     ]
 
-    scoreboard = ScoreBoard(font_size=36, position=(10, 5))
+    
 
     targets = [
         Target(space, (300, 500), 20),
         Target(space, (250, 400), 25)
     ]
+
+    scoreboard = ScoreBoard(font_size=36, position=(10, 5))
+
+    def hits_target(arbiter, space, data):
+        scoreboard.increase_score(10)
+        print("Target hit! Score:", scoreboard.score)
+        return True
+    
+    handler = space.add_collision_handler(1, 2)
+    handler.begin = hits_target
 
     run = True
     while run:

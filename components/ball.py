@@ -8,6 +8,7 @@ class Ball:
         self.body = pymunk.Body(mass, inertia)
         self.body.position = position
         self.shape = pymunk.Circle(self.body, radius)
+        self.shape.collision_type = 1
         self.shape.elasticity = elasticity
         self.shape.friction = 1.2
         self.color = (128, 128, 128)

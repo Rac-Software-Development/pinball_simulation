@@ -22,7 +22,7 @@ class Slingshot:
          self.shape = pymunk.Poly(self.body, self.points)
          self.shape.elasticity = elasticity
          self.shape.friction = 0.5
-         self.shape.collision_type = 2
+         self.shape.collision_type = 0
 
          space.add(self.body, self.shape)
 
