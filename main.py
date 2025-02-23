@@ -8,6 +8,7 @@ from components.bumper import Bumper
 from components.ball_guide import BallGuide
 from components.slingshot import Slingshot
 from components.target import Target
+from components.score_board import ScoreBoard
 
 SCREEN_WIDTH = 600
 SCREEN_HEIGHT = 900
@@ -85,6 +86,8 @@ def main():
         Bumper(space, (300, 200), color=(255, 255, 255))
     ]
 
+    scoreboard = ScoreBoard(font_size=36, position=(10, 5))
+
     targets = [
         Target(space, (300, 500), 20),
         Target(space, (250, 400), 25)
@@ -131,6 +134,8 @@ def main():
         
         left_flipper.draw(screen)
         right_flipper.draw(screen)
+
+        scoreboard.draw(screen)
         
         
         
