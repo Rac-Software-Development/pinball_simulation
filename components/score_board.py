@@ -9,7 +9,7 @@ class ScoreBoard:
 
     def draw(self, screen):
         score_text = self.font.render(f"Score: {self.score}", True, (255,255,255))
-        lives_text = self.font.render(f"Score: {self.score}", True, (255,255,255))
+        lives_text = self.font.render(f"Lives: {self.lives}", True, (255,255,255))
         
         screen.blit(score_text, self.position)
         screen.blit(lives_text, (self.position[0], self.position[1] + 40))

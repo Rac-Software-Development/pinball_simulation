@@ -1,6 +1,7 @@
 import pygame
 import pymunk
 import pymunk.pygame_util
+from components.config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 from components.ball import Ball
 from components.outer_lines import OuterLine
 from components.flipper import Flipper
@@ -10,9 +11,8 @@ from components.slingshot import Slingshot
 from components.target import Target
 from components.score_board import ScoreBoard
 
-SCREEN_WIDTH = 600
-SCREEN_HEIGHT = 900
-FPS = 60
+
+
 
 def create_outer_lines(space):
    return [
@@ -51,6 +51,8 @@ def main():
     pygame.display.set_caption("Dylan's Pinball simulation")
     clock = pygame.time.Clock()
 
+    highscore = 0
+
     # create the space
     space = pymunk.Space()
     space.gravity = (0, 600)
@@ -88,7 +90,7 @@ def main():
     ]
 
     
-   # create the targets
+    # create the targets
     targets = [
         Target(space, (300, 500), 20),
         Target(space, (250, 400), 25),
@@ -150,11 +152,23 @@ def main():
         right_flipper.draw(screen)
 
         scoreboard.draw(screen)
-        
-        
-        
-        
 
+        if ball.body.position.y > SCREEN_HEIGHT:
+            scoreboard.decrease_life()
+            print(f"remaining lives: {scoreboard.lives}")
+            if scoreboard.lives > 0:
+                ball = Ball.spawn(space, radius=10)
+            else:
+                from components.game_over import game_over_screen
+                if scoreboard.score > highscore:
+                    highscore = scoreboard.score
+                choice = game_over_screen(screen, scoreboard.score, highscore)
+                if choice == "restart":
+                    main()
+                else:
+                    run = False
+        
+        
         space.step(1 / FPS)
 
         pygame.display.flip()

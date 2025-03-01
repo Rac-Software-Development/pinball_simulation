@@ -1,5 +1,5 @@
 import pygame
-from main import SCREEN_WIDTH, SCREEN_HEIGHT
+from components.config import SCREEN_WIDTH, SCREEN_HEIGHT
 
 
 def game_over_screen(screen, current_score, highscore):
@@ -26,7 +26,7 @@ def game_over_screen(screen, current_score, highscore):
                     pygame.quit()
                     return "quit"
                 
-        screen.fill(pygame.color("black"))
+        screen.fill(pygame.Color("black"))
 
         # draw texts
         screen.blit(game_over_text, (SCREEN_WIDTH // 2 - game_over_text.get_width() // 2, 300))
@@ -36,6 +36,7 @@ def game_over_screen(screen, current_score, highscore):
         # draw buttons
         pygame.draw.rect(screen, (0,255,0), restart_rect)
         pygame.draw.rect(screen, (255, 0, 0), quit_rect)
+
         restart_text = small_font.render("Restart", True, (0,0,0))
         quit_text = small_font.render("Quit", True, (0,0,0))
         screen.blit(restart_text, (restart_rect.centerx - restart_rect.get_width() // 2,
