@@ -1,6 +1,6 @@
 import pytest
 import sys
-sys.path.insert(0, "C:/pinball_simulation/pinball_simulation/")
+sys.path.insert(0, "C:/pinball_simulation/pinball_simulation-1/")
 from components.ball import Ball
 import pymunk
 
@@ -21,5 +21,5 @@ def test_ball_init(space):
 def test_ball_spawn(space):
     ball = Ball.spawn(space)
     assert isinstance(ball, Ball)
-    assert 115 <= ball.body.position.x <= 350
-    assert ball.body.position.y == 200
+    assert ball.body.position.x == 500
+    assert ball.body.position.y == 700
