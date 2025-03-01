@@ -39,10 +39,12 @@ def game_over_screen(screen, current_score, highscore):
 
         restart_text = small_font.render("Restart", True, (0,0,0))
         quit_text = small_font.render("Quit", True, (0,0,0))
-        screen.blit(restart_text, (restart_rect.centerx - restart_rect.get_width() // 2,
-                                   restart_rect.centery - restart_rect.get_height() // 2))
-        screen.blit(quit_text, (quit_rect.centerx - quit_rect.get_width() // 2,
-                                quit_rect.centery -  quit_rect.get_height() // 2))
+        
+        restart_text_rect = restart_text.get_rect(center=restart_rect.center)
+        quit_text_rect = quit_text.get_rect(center=quit_rect.center)
+
+        screen.blit(restart_text, restart_text_rect)
+        screen.blit(quit_text, quit_text_rect)
         
         pygame.display.flip()
 

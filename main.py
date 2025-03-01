@@ -42,18 +42,10 @@ def create_outer_lines(space):
            (450, 850), # slightly left of the middle bottom
        ], color=(255, 255, 255)),
    ]
+
    
-    
-# the main function
-def main():
-    pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-    pygame.display.set_caption("Dylan's Pinball simulation")
-    clock = pygame.time.Clock()
 
-    highscore = 0
-
-    # create the space
+def initialize_game():
     space = pymunk.Space()
     space.gravity = (0, 600)
     
@@ -92,8 +84,6 @@ def main():
     
     # create the targets
     targets = [
-        Target(space, (300, 500), 20),
-        Target(space, (250, 400), 25),
         Target(space, (150, 250), 20),
         Target(space, (450, 200), 25),
         Target(space, (300, 100), 20)
@@ -101,13 +91,30 @@ def main():
 
     scoreboard = ScoreBoard(font_size=36, position=(10, 5))
 
+    return space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard
+
+
+
+# the main function
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    pygame.display.set_caption("Dylan's Pinball simulation")
+    clock = pygame.time.Clock()
+
+    highscore = 0
+    space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard = initialize_game()
+
     def hits_target(arbiter, space, data):
         scoreboard.increase_score(10)
         print("Target hit! Score:", scoreboard.score)
         return True
-    
+
+
     handler = space.add_collision_handler(1, 2)
     handler.begin = hits_target
+
+    
 
     run = True
     while run:
@@ -164,7 +171,7 @@ def main():
                     highscore = scoreboard.score
                 choice = game_over_screen(screen, scoreboard.score, highscore)
                 if choice == "restart":
-                    main()
+                    space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard = initialize_game()
                 else:
                     run = False
         
