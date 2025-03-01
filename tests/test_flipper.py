@@ -27,23 +27,40 @@ def test_flipper_rotation(space):
 
     flipper.activate()
 
+    # step simulation and check if flipper rotates in the correct direction
     for _ in range(10):
         space.step(1/60)
 
     new_angle = flipper.body.angle
     print(f"new_angle after activation: {new_angle}")
 
+    # expect the left flipper  to rotate counterclockwise and the right flipper clockwise
     if flipper.is_left:
         assert new_angle < initial_angle, f"Left flipper should rotate counterclockwise. expected < {initial_angle}, got {new_angle}"
     else:
         assert new_angle > initial_angle, f"Right flipper should rotate clockwise. expected > {initial_angle}, got {new_angle}"
 
-# tests if the flipper rotates back to its original position after deactivation
+def test_flipper_deactivation(space):
+    flipper = Flipper(space, (150, 700), is_left=True)
+
+    # activate the flipper and step simulation
+    flipper.activate()
+    for _ in range(10):
+        space.step(1/60)
+
+    # deactivate the flipper and step again
+    flipper.deactivate()
+    for _ in range(10):
+        space.step(1/60)
+
+
+# tests if the pivot point moves correctly when the flipper is activated
 def test_flipper_line_update(space):
     flipper = Flipper(space, (150, 700), is_left=True)
     expected_pivot = pymunk.Vec2d(150, 700) + pymunk.Vec2d(-50, 0)
+    
+    # activate the flipper and step simulation
     flipper.activate()
-
     for _ in range(10):
         space.step(1/60)
 

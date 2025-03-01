@@ -1,7 +1,7 @@
 import pytest
 import pymunk
 import sys
-sys.path.insert(0, "C:/Users/dylsa/pinball_simulation/")
+sys.path.insert(0, "C:/Users/dylsa/pinball_simulation-1/")
 from components.bumper import Bumper
 from components.ball import Ball
 
