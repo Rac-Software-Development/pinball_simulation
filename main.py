@@ -10,6 +10,7 @@ from components.ball_guide import BallGuide
 from components.slingshot import Slingshot
 from components.target import Target
 from components.score_board import ScoreBoard
+from mqtt_client import send_score
 
 
 
@@ -108,6 +109,7 @@ def main():
     def hits_target(arbiter, space, data):
         scoreboard.increase_score(10)
         print("Target hit! Score:", scoreboard.score)
+        send_score(scoreboard.score)
         return True
 
 
