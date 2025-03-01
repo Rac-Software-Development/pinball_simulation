@@ -90,7 +90,17 @@ def initialize_game():
         Target(space, (300, 100), 20)
     ]
 
+
     scoreboard = ScoreBoard(font_size=36, position=(10, 5))
+
+    def hits_target(arbiter, space, data):
+        scoreboard.increase_score(10)
+        print("Target hit! Score:", scoreboard.score)
+        send_score(scoreboard.score)
+        return True
+
+    handler = space.add_collision_handler(1, 2)
+    handler.begin = hits_target
 
     return space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard
 
