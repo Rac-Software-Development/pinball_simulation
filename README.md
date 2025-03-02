@@ -1,2 +1,2 @@
-# pinball_simulation
-Een flipperkast simulatie
+# pinball_simulation 
+Een flipperkast simulatie van Dylan Mendes Freire (1024040)

@@ -114,7 +114,7 @@ class PinballGame:
         handler = self.space.add_collision_handler(1, 2)
         handler.begin = hits_target
 
-        handler_bumper = self.space.add_collision_handler(1, 3)
+        handler_bumper = self.space.add_collision_handler(1, 4)
         handler_bumper.begin = hits_bumper
     
     # game_over screen
