@@ -30,7 +30,7 @@ Requirements:
 
 steps:
  1. clone this repository (either from https or SSH) into your IDE of choice
- you need to download mosquitto and install it on your laptop or pc and run the mqtt broker in powershell or bash before you can play the game
+ you need to download mosquitto and install it on your laptop or pc and run the mqtt broker in powershell or bash and subscribe to the topics before you can play the game 
 
  2. install the required dependencies:
   pip install pygame
