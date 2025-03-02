@@ -22,13 +22,14 @@ class Flipper:
         self.shape.elasticity = 0.5
         self.space.add(self.body, self.shape)
 
-
+        # sets the pivot point of the flipper
         pivot_offset = (-width / 2, 0) if is_left else (width / 2, 0)
         pivot_world = self.body.position + pivot_offset
         self.pivot = pymunk.PivotJoint(self.space.static_body, self.body, pivot_world)
         self.pivot.collide_bodies = False
         self.space.add(self.pivot)
-
+        
+        # sets the limit of the flipper
         rest_angle = 0.0
         angle_range = math.radians(30) 
         min_angle = rest_angle - angle_range
@@ -36,6 +37,7 @@ class Flipper:
         self.limit_joint = pymunk.RotaryLimitJoint(self.space.static_body, self.body, min_angle, max_angle)
         space.add(self.limit_joint)
 
+        # sets the spring of the flipper
         self.spring = pymunk.DampedRotarySpring(self.space.static_body, self.body, rest_angle, stiffness=1000000, damping=10000)
 
         self.space.add(self.spring)

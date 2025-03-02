@@ -30,11 +30,13 @@ class PinballGame:
         self.highscore = 0
         self.setup_collision_handlers()
 
+    # creates the ball and sets the velocity
     def create_ball(self):
         ball = Ball.spawn(self.space, radius=10)
         ball.body.velocity = pymunk.Vec2d(0, 50)
         return ball
     
+    # creates the outer lines of the pinball table
     def create_outer_lines(self):
         return [
             OuterLine(self.space, [(50, 850), (50, 50), (300, 10)], color=(255, 255, 255)),
@@ -43,23 +45,27 @@ class PinballGame:
             OuterLine(self.space, [(550, 850), (450, 850)], color=(255, 255, 255)),
         ]
     
+    # creates the guides for the ball to the flipper
     def create_ball_guides(self):
         return [
             BallGuide(self.space, (175, 750), (50, 675)),
             BallGuide(self.space, (425, 750), (550, 675))
         ]
     
+    # creates the slingshots, also sets the location
     def create_slingshots(self):
         return [
             Slingshot(self.space, (200, 620), is_left=True),
             Slingshot(self.space, (400, 620), is_left=False)
         ]
     
+    # creates the flippers, also sets the location
     def create_flippers(self):
         left_flipper = Flipper(self.space, (230, 750), is_left=True)
         right_flipper = Flipper(self.space, (370, 750), is_left=False)
         return left_flipper, right_flipper
     
+    # creates the bumpers, also sets the location and color
     def create_bumpers(self):
         return [
             Bumper(self.space, (200, 300), color=(255, 255, 255)),
@@ -68,13 +74,15 @@ class PinballGame:
             Bumper(self.space, (350, 500), color=(255, 255, 255))
         ]
     
+    # creates the targets, also sets the location and size
     def create_targets(self):
         return [
-            Target(self.space, (150, 250), 20),
+            Target(self.space, (100, 300), 20),
             Target(self.space, (450, 200), 25),
             Target(self.space, (300, 100), 20)
         ]
     
+    # setup collision handlers
     def setup_collision_handlers(self):
         def hits_target(arbiter, space, data):
             self.scoreboard.increase_score(10)
