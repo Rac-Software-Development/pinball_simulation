@@ -1,6 +1,7 @@
 import pygame
 import pymunk
 import pymunk.pygame_util
+import os
 from components.config import SCREEN_WIDTH, SCREEN_HEIGHT, FPS
 from components.ball import Ball
 from components.outer_lines import OuterLine
@@ -27,12 +28,25 @@ class PinballGame:
         self.bumpers = self.create_bumpers()
         self.targets = self. create_targets()
         self.scoreboard = ScoreBoard(font_size=36, position=(10, 5))
-        self.highscore = 0
+        self.highscore = self.load_highscore()
         self.setup_collision_handlers()
 
         # MQTT Clients
         self.score_mqtt = ScoreMQTTClient()
         self.game_mqtt = GameMQTTClient()
+
+    # load the higscore from the file
+    def load_highscore(self):
+         if os.path.exists("highscore.txt"):
+              with open("highscore.txt", "r") as file:
+                   return int(file.read().strip())
+         return 0
+    
+    # save the highscore to the file
+    def save_highscore(self):
+         with open("highscore.txt", "w") as file:
+              file.write(str(self.highscore))
+              
 
     # creates the ball and sets the velocity
     def create_ball(self):
@@ -103,13 +117,17 @@ class PinballGame:
         handler_bumper = self.space.add_collision_handler(1, 3)
         handler_bumper.begin = hits_bumper
     
+    # game_over screen
     def game_over(self, screen):
         from components.game_over import game_over_screen
         if self.scoreboard.score > self.highscore:
             self.highscore = self.scoreboard.score
+            self.save_highscore()
         choice = game_over_screen(screen, self.scoreboard.score, self.highscore)
         return choice
 
+
+# function to handle the user_input <left flipper, right flipper>
 def handle_user_input(keys, left_flipper, right_flipper):
     if keys[pygame.K_LEFT]:
             left_flipper.activate()
