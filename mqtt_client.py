@@ -2,26 +2,47 @@ import paho.mqtt.client as mqtt
 
 BROKER = 'localhost'
 PORT = 1883
-TOPIC = 'pinball/score'
-
-client = mqtt.Client()
-
-def on_connect(client, userdata, flags, rc):
-    print("Connected to MQTT Broker with result code" + str(rc))
-
-def on_message(client, userdata, msg):
-    print(f"Message received {msg.payload.decode()}")
-
-client.on_connect = on_connect
-client.on_message = on_message
-
-client.connect(BROKER, PORT, 60)
-
-client.loop_start()
-
-def send_score(score):
-    message = f"Score: {score}"
-    client.publish(TOPIC, message)
-    print(f"Sent score: {score} to topic {TOPIC}")
 
 
+
+class ScoreMQTTClient:
+    def __init__(self, topic='pinball/score'):
+        self.client = mqtt.Client()
+        self.topic = topic
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+        self.client.connect(BROKER, PORT, 60)
+        self.client.loop_start()
+
+    def on_connect(self, client, userdata, flags, rc):
+        print(f"[ScoreMQTT] Connected with MQTT Broker (code {rc})")
+
+    def on_message(self, client, userdata, msg):
+        print(f"[ScoreMQTT] Received: {msg.payload.decode()}")
+
+
+    def send_score(self, score):
+        message = f"Score: {score}"
+        self.client.publish(self.topic, message)
+        print(f"[ScoreMQTT] Sent score: {score}")
+
+class GameMQTTClient:
+    def __init__(self, topic='pinball/game'):
+        self.client = mqtt.Client()
+        self.topic = topic
+        self.client.on_connect = self.on_connect
+        self.client.on_message = self.on_message
+        self.client.connect(BROKER, PORT, 60)
+        self.client.loop_start()
+
+    def on_connect(self, client, userdata, flags, rc):
+        print(f"[GameMQTT] Connected with MQTT Broker (code {rc})")
+
+    def on_message(self, client, userdata, msg):
+        print(f"[GameMQTT] Received: {msg.payload.decode()}")
+
+
+    def send_hit(self, hit_type):
+        message = f"Score: {hit_type}"
+        self.client.publish(self.topic, message)
+        print(f"[ScoreMQTT] Sent score: {hit_type}")

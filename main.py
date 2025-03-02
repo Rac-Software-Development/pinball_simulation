@@ -10,7 +10,7 @@ from components.ball_guide import BallGuide
 from components.slingshot import Slingshot
 from components.target import Target
 from components.score_board import ScoreBoard
-from mqtt_client import send_score
+from mqtt_client import ScoreMQTTClient, GameMQTTClient
 
 
 
@@ -29,6 +29,10 @@ class PinballGame:
         self.scoreboard = ScoreBoard(font_size=36, position=(10, 5))
         self.highscore = 0
         self.setup_collision_handlers()
+
+        # MQTT Clients
+        self.score_mqtt = ScoreMQTTClient()
+        self.game_mqtt = GameMQTTClient()
 
     # creates the ball and sets the velocity
     def create_ball(self):
@@ -86,11 +90,18 @@ class PinballGame:
     def setup_collision_handlers(self):
         def hits_target(arbiter, space, data):
             self.scoreboard.increase_score(10)
-            send_score(self.scoreboard.score)
+            self.score_mqtt.send_score(self.scoreboard.score)
             return True
+        
+        def hits_bumper(arbiter, space, data):
+             self.game_mqtt.send_hit("bumper")
+             return True
         
         handler = self.space.add_collision_handler(1, 2)
         handler.begin = hits_target
+
+        handler_bumper = self.space.add_collision_handler(1, 3)
+        handler_bumper.begin = hits_bumper
     
     def game_over(self, screen):
         from components.game_over import game_over_screen
