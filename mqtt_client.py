@@ -43,6 +43,6 @@ class GameMQTTClient:
 
 
     def send_hit(self, hit_type):
-        message = f"Score: {hit_type}"
+        message = f"Hits: {hit_type}"
         self.client.publish(self.topic, message)
         print(f"[GameMQTT] Sent hit: {hit_type}")
