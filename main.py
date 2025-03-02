@@ -15,96 +15,95 @@ from mqtt_client import send_score
 
 
 
-def create_outer_lines(space):
-   return [
-       # left line slighly diagonal to the top center
-       OuterLine(space, [
-           (50, 850), # bottom left
-           (50, 50), # top left
-           (300, 10), # diagonal line to top center
-       ], color=(255, 255, 255)),
-       
-       # right line slighly diagonal to the top center
-       OuterLine(space, [
-           (550, 850), # bottom right
-           (550, 50), # top right
-           (300, 10) # diagonal line to top center
-       ], color=(255, 255, 255)),
-       
-       # bottom left section of the bottom line
-       OuterLine(space, [
-           (200, 850), # middle bottom
-           (50, 850), # bottom left
-       ], color=(255, 255, 255)),
+class PinballGame:
+    def __init__(self):
+        self.space = pymunk.Space()
+        self.space.gravity = (0, 600)
+        self.ball = self.create_ball()
+        self.outer_lines = self.create_outer_lines()
+        self.ball_guides = self.create_ball_guides()
+        self.slingshots = self.create_slingshots()
+        self.left_flipper, self.right_flipper = self.create_flippers()
+        self.bumpers = self.create_bumpers()
+        self.targets = self. create_targets()
+        self.scoreboard = ScoreBoard(font_size=36, position=(10, 5))
+        self.highscore = 0
+        self.setup_collision_handlers()
 
-        # bottom right section of the bottom line
-       OuterLine(space, [
-           (550, 850), # bottom right
-           (450, 850), # slightly left of the middle bottom
-       ], color=(255, 255, 255)),
-   ]
-
-   
-
-def initialize_game():
-    space = pymunk.Space()
-    space.gravity = (0, 600)
+    def create_ball(self):
+        ball = Ball.spawn(self.space, radius=10)
+        ball.body.velocity = pymunk.Vec2d(0, 50)
+        return ball
     
-    # create the ball
-    ball = Ball.spawn(space, radius=10)
-    ball.body.velocity = pymunk.Vec2d(0, 50)
-
-    # create the outer lines
-    outer_lines = create_outer_lines(space)
-
-    # create the line that guides the ball to the flippers
-    ball_guides = [
-        BallGuide(space, (175, 750), (50, 675)), # left guide
-        BallGuide(space, (425, 750), (550, 675)) # right guide
-    ]
-
-    # create the slingshots
-    slingshots = [
-        Slingshot(space, (200, 620), is_left=True),
-        Slingshot(space, (400, 620), is_left=False)
-    ]
-
-
-    # create the flippers
-    left_flipper = Flipper(space, (230, 750), is_left=True)
-    right_flipper = Flipper(space, (370, 750), is_left=False)
-
-    # create the bumpers
-    bumpers = [
-        Bumper(space, (200, 300), color=(255, 255, 255)),
-        Bumper(space, (400, 400), color=(255, 255, 255)),
-        Bumper(space, (300, 200), color=(255, 255, 255)),
-        Bumper(space, (350, 500), color=(255, 255, 255))
-    ]
-
+    def create_outer_lines(self):
+        return [
+            OuterLine(self.space, [(50, 850), (50, 50), (300, 10)], color=(255, 255, 255)),
+            OuterLine(self.space, [(550, 850), (550, 50), (300, 10)], color=(255, 255, 255)),
+            OuterLine(self.space, [(200, 850), (50, 850)], color=(255, 255, 255)),
+            OuterLine(self.space, [(550, 850), (450, 850)], color=(255, 255, 255)),
+        ]
     
-    # create the targets
-    targets = [
-        Target(space, (150, 250), 20),
-        Target(space, (450, 200), 25),
-        Target(space, (300, 100), 20)
-    ]
+    def create_ball_guides(self):
+        return [
+            BallGuide(self.space, (175, 750), (50, 675)),
+            BallGuide(self.space, (425, 750), (550, 675))
+        ]
+    
+    def create_slingshots(self):
+        return [
+            Slingshot(self.space, (200, 620), is_left=True),
+            Slingshot(self.space, (400, 620), is_left=False)
+        ]
+    
+    def create_flippers(self):
+        left_flipper = Flipper(self.space, (230, 750), is_left=True)
+        right_flipper = Flipper(self.space, (370, 750), is_left=False)
+        return left_flipper, right_flipper
+    
+    def create_bumpers(self):
+        return [
+            Bumper(self.space, (200, 300), color=(255, 255, 255)),
+            Bumper(self.space, (400, 400), color=(255, 255, 255)),
+            Bumper(self.space, (300, 200), color=(255, 255, 255)),
+            Bumper(self.space, (350, 500), color=(255, 255, 255))
+        ]
+    
+    def create_targets(self):
+        return [
+            Target(self.space, (150, 250), 20),
+            Target(self.space, (450, 200), 25),
+            Target(self.space, (300, 100), 20)
+        ]
+    
+    def setup_collision_handlers(self):
+        def hits_target(arbiter, space, data):
+            self.scoreboard.increase_score(10)
+            send_score(self.scoreboard.score)
+            return True
+        
+        handler = self.space.add_collision_handler(1, 2)
+        handler.begin = hits_target
+    
+    def game_over(self, screen):
+        from components.game_over import game_over_screen
+        if self.scoreboard.score > self.highscore:
+            self.highscore = self.scoreboard.score
+        choice = game_over_screen(screen, self.scoreboard.score, self.highscore)
+        return choice
 
+def handle_user_input(keys, left_flipper, right_flipper):
+    if keys[pygame.K_LEFT]:
+            left_flipper.activate()
+    else:
+            left_flipper.deactivate()
+        
 
-    scoreboard = ScoreBoard(font_size=36, position=(10, 5))
-
-    def hits_target(arbiter, space, data):
-        scoreboard.increase_score(10)
-        print("Target hit! Score:", scoreboard.score)
-        send_score(scoreboard.score)
-        return True
-
-    handler = space.add_collision_handler(1, 2)
-    handler.begin = hits_target
-
-    return space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard
-
-
+    if keys[pygame.K_RIGHT]:
+            right_flipper.activate()
+    else:
+            right_flipper.deactivate()
+    
+    
 
 # the main function
 def main():
@@ -113,83 +112,62 @@ def main():
     pygame.display.set_caption("Dylan's Pinball simulation")
     clock = pygame.time.Clock()
 
-    highscore = 0
-    space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard = initialize_game()
+    # create the game
+    game = PinballGame()
 
-    def hits_target(arbiter, space, data):
-        scoreboard.increase_score(10)
-        print("Target hit! Score:", scoreboard.score)
-        send_score(scoreboard.score)
-        return True
-
-
-    handler = space.add_collision_handler(1, 2)
-    handler.begin = hits_target
-
-    
-
+    # run the game
     run = True
     while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
 
+        # handle user input
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            left_flipper.activate()
-        else:
-            left_flipper.deactivate()
-        
-
-        if keys[pygame.K_RIGHT]:
-            right_flipper.activate()
-        else:
-            right_flipper.deactivate()
+        handle_user_input(keys, game.left_flipper, game.right_flipper)
 
         screen.fill(pygame.Color("black"))
 
-        ball.draw(screen)
-        ball.body.velocity = ball.body.velocity * ball.damping
+        game.ball.draw(screen)
+        # Apply damping to the ball
+        game.ball.body.velocity = game.ball.body.velocity * game.ball.damping
 
-        for line in outer_lines:
+        for line in game.outer_lines:
             line.draw(screen)
 
-        for guide in ball_guides:
+        for guide in game.ball_guides:
             guide.draw(screen)
 
-        for bumper in bumpers:
+        for bumper in game.bumpers:
             bumper.draw(screen)
         
-        for sling in slingshots:
+        for sling in game.slingshots:
             sling.draw(screen)
 
-        for target in targets:
+        for target in game.targets:
             target.draw(screen)
 
         
-        left_flipper.draw(screen)
-        right_flipper.draw(screen)
+        game.left_flipper.draw(screen)
+        game.right_flipper.draw(screen)
 
-        scoreboard.draw(screen)
+        game.scoreboard.draw(screen)
 
-        if ball.body.position.y > SCREEN_HEIGHT:
-            scoreboard.decrease_life()
-            print(f"remaining lives: {scoreboard.lives}")
-            if scoreboard.lives > 0:
-                ball = Ball.spawn(space, radius=10)
+        # check if the ball is out of bounds and either respawns or ends the game
+        if game.ball.body.position.y > SCREEN_HEIGHT:
+            game.scoreboard.decrease_life()
+            print(f"remaining lives: {game.scoreboard.lives}")
+            if game.scoreboard.lives > 0:
+                game.ball = game.create_ball()
             else:
-                from components.game_over import game_over_screen
-                if scoreboard.score > highscore:
-                    highscore = scoreboard.score
-                choice = game_over_screen(screen, scoreboard.score, highscore)
+                choice = game.game_over(screen)
                 if choice == "restart":
-                    space, ball, outer_lines, ball_guides, slingshots, left_flipper, right_flipper, bumpers, targets, scoreboard = initialize_game()
+                    game.__init__()
                 else:
                     run = False
         
         
-        space.step(1 / FPS)
-
+        game.space.step(1 / FPS)
         pygame.display.flip()
         clock.tick(FPS)
 
