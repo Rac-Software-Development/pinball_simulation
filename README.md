@@ -32,6 +32,43 @@ steps:
  1. clone this repository (either from https or SSH) into your IDE of choice
  you need to download mosquitto and install it on your laptop or pc and run the mqtt broker in powershell or bash and subscribe to the topics before you can play the game 
 
+ it goes like this, before you turn on the game: 
+    install the mosquitto broker on your device: https://mosquitto.org/download/ 
+    
+    # in windows
+    once you have installed it go to your cmd as admin and set the following command:
+    Cd C:\Program Files\mosquitto
+    mosquitto -v
+
+    then you open two other CMD windows with with the following:
+    first CMD:
+    cd C:\Program Files\mosquitto
+    mosquitto_sub -h localhost -t "pinball/score"
+
+    second CMD:
+     cd C:\Program Files\mosquitto
+    mosquitto_sub -h localhost -t "pinball/game"
+
+    # in MacOS:
+    in your SH: brew install mosquitto
+    start the broker with: mosquitto -v
+    Open two terminals and subscribe to the topics
+    first terminal: mosquitto_sub -h localhost -t "pinball/score"
+    second terminal: mosquitto_sub -h localhost -t "pinball/game"
+
+    # in Linux:
+    (Debian/Ubuntu)
+    sudo apt update && sudo apt install mosquitto mosquitto-clients -y
+
+    (Redhat/ fedhora, CentOS)
+    sudo dnf install mosquitto mosquitto-clients -y
+
+    start the broker: mosquitto -v
+
+    Open the other 2 terminals:
+    first terminal: mosquitto_sub -h localhost -t "pinball/score"
+    second terminal: mosquitto_sub -h localhost -t "pinball/game"
+
  2. install the required dependencies:
   pip install pygame
   pip install pymunk
